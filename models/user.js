@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 // const Schema = mongoose.Schema;
@@ -86,6 +87,10 @@ const otherPassportOptions = {
   }
 };
 
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+// console.log('user model', UserSchema);
 
 UserSchema.plugin(passportLocalMongoose, otherPassportOptions);
 // UserSchema.plugin(passportLocalMongoose);
@@ -100,5 +105,20 @@ UserSchema.plugin(passportLocalMongoose, otherPassportOptions);
 // UserSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model('User', UserSchema);
+
+passport.deserializeUser((user, done) => {
+  User.findById(user._id)
+    .populate('expRef')
+    .populate('needsRef')
+    .populate('chapterRef')
+    .exec((err, data) => {
+      if (err) {
+        console.log('Error when deserializes user', err);
+      } else {
+        done(null, data);
+      }
+    });
+});
+
 
 module.exports = User;

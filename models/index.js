@@ -1,6 +1,11 @@
+const Chapter = require('./chapter');
+const Expense = require('./expense');
+const Needs = require('./needs');
+const User = require('./user');
+
 module.exports = {
-  Chapter: require("./chapter"),
-  Expense: require("./expense"),
-  Needs: require("./needs"),
-  User: require("./user")
+  Chapter,
+  Expense,
+  Needs,
+  User,
 };
