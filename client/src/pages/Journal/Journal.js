@@ -5,19 +5,13 @@ import ChapterCard from './ChapterCard';
 import API from '../../utils/API';
 
 var config = {
-	// apiKey: process.env.REACT_APP_FIREBASE_apikey,
-	// authDomain: process.env.REACT_APP_FIREBASE_authDomain,
-	// databaseURL: process.env.REACT_APP_FIREBASE_databaseURL,
-	// projectId: process.env.REACT_APP_FIREBASE_projectId,
+	apiKey: process.env.REACT_APP_FIREBASE_apikey,
+	authDomain: process.env.REACT_APP_FIREBASE_authDomain,
+	databaseURL: process.env.REACT_APP_FIREBASE_databaseURL,
+	projectId: process.env.REACT_APP_FIREBASE_projectId,
+	storageBucket: "intern-project-4b679.appspot.com",
 	// storageBucket: process.env.REACT_APP_FIREBASE_storageBucket,
-	// messagingSenderId: process.env.REACT_APP_FIREBASE_messagingSenderId,
-
-apikey: "AIzaSyCSuecWnnFJo55VAuiEzvSfR1xLNRuwwkI",
-authDomain: "intern-project-4b679.firebaseapp.com",
-databaseURL: "https://intern-project-4b679.firebaseio.com",
-projectId: "intern-project-4b679",
-storageBucket: "intern-project-4b679.appspot.com",
-messagingSenderId: "1037796012544"
+	messagingSenderId: process.env.REACT_APP_FIREBASE_messagingSenderId,
 };
 
 firebase.initializeApp(config);
@@ -43,8 +37,6 @@ export default class extends Component {
 		})
 
 		API.getChapters().then(response=> {
-			// console.log("API chapter response: " , response);
-			// console.log('response is: ', response)
 			this.setState({
 				chapterData: response.data
 			})
@@ -53,7 +45,6 @@ export default class extends Component {
 		})
 
 		API.getNeeds().then(res => {
-			// console.log('NEEDS: ', res)
 			this.setState({
 			  needsData:res.data
 			})
@@ -72,52 +63,88 @@ export default class extends Component {
 	    console.log('current state', this.state);
 	    let fileButton = document.getElementById("fileButton");
 	    let file = fileButton.files[0];
-        let image = "";
-	    //create storage ref
-	    let storageRef = firebase.storage().ref("chapImg/" + Date.now() + file.name);
-	    //upload file
-	    let task = storageRef.put(file);
-	   
-	    task.on('state_changed', 
-		  (snapshot) => {
-		    console.log("SNAPSHOT:", snapshot);
-		  }, 
-		  (err) => {
-		  },
-		  () => {
-		    console.log("COMPLETE");
-		    storageRef.getDownloadURL().then((url) => {
-			  image = url;
-			  let data = {
-			  	chapTitle: this.state.chapterTitle,
-			  	chapNote: this.state.description,
-			  	chapImg: image,
-			  	reqNum: this.state.requireNum,
-			  	chapDate: this.state.date,
-			  };
+	    // console.log(file.name);
+	    console.log(file);
+        
+	    if (this.state.image !== ""){
+	      // let file = fileButton.files[0];
+	      let image = "";
+	      //create storage ref
+	      let storageRef = firebase.storage().ref("chapImg/" + Date.now() + file.name);
+	      //upload file
+	      let task = storageRef.put(file);	
+		    task.on('state_changed', 
+			  (snapshot) => {
+			    console.log("SNAPSHOT:", snapshot);
+			  }, 
+			  (err) => {
+			  },
+			  () => {
+			    console.log("COMPLETE");
+			    storageRef.getDownloadURL().then((url) => {
+				  image = url;
+				  let data = {
+				  	chapTitle: this.state.chapterTitle,
+				  	chapNote: this.state.description,
+				  	chapImg: image,
+				  	reqNum: this.state.requireNum,
+				  	chapDate: this.state.date,
+				  };
 
-			  API.addChapter(data).then((response) => {
-			  	console.log("Response from adding chapter: ", response);
-			  	this.setState({
-			  	  chapterTitle:"",
-			  	  description: "",
-			  	  image:"",
+				  API.addChapter(data).then((response) => {
+				  	console.log("Response from adding chapter: ", response);
+				  	this.setState({
+				  	  chapterTitle:"",
+				  	  description: "",
+				  	  image:"",
+				  	  date: "",
+					});
+				  })
+				  .catch((err) => {
+			  	  	console.log('Error while adding chapter: ', err);
+				  })
 
+				  API.getChapters().then((response) => {
+					this.setState({
+				  	  chapterData:response.data
+					});
+			  	  });
+		  	    });
+		      }
+		    )
+		} else{
 
-			  	  date: "",
-				});
-			  })
-			  .catch((err) => {
-		  	  	console.log('Error while adding chapter: ', err);
-			  })
+		  // let image = "";
+	   //    //create storage ref
+	   //    let storageRef = "";
+	   //    //upload file
+	   //    let task = storageRef.put(file);	
+		  let data = {
+		  	chapTitle: this.state.chapterTitle,
+		  	chapNote: this.state.description,
+		  	reqNum: this.state.requireNum,
+		  	chapDate: this.state.date,
+		  };
 
-			  API.getChapters().then((response) => {
-				this.setState({
-			  	  chapterData:response.data
-				});
-		  	  });
-	  	    });
-	      })
+		  API.addChapter(data).then((response) => {
+		  	console.log("Response from adding chapter: ", response);
+		  	this.setState({
+		  	  chapterTitle:"",
+		  	  description: "",
+		  	  date: "",
+		  	  requireNum:"",
+			});
+		  })
+		  .catch((err) => {
+	  	  	console.log('Error while adding chapter: ', err);
+		  })
+
+		  API.getChapters().then((response) => {
+			this.setState({
+		  	  chapterData:response.data
+			});
+	  	  });
+		};
 	  } else {
 		console.log("Unable to add chapter.")
 	  }

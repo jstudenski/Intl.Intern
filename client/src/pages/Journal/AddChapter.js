@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import DropDown from './DropDown';
 import { FormControl } from 'material-ui/Form';
-import Input, { InputLabel } from 'material-ui/Input';
+import { InputLabel } from 'material-ui/Input';
 
 const AddChapter = (props) => {
 

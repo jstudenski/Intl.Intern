@@ -12,7 +12,7 @@ const DropDown = props => (
   >
     {props.items.map(need =>
     (<MenuItem key={need._id} value={need.needNumber}>
-     {need.needTitle}
+     {need.needNumber}: {need.needTitle}
     </MenuItem>))}
   </Select>
 );
