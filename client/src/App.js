@@ -1,5 +1,4 @@
 import React from 'react';
-import dotenv from 'dotenv';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 // Material UI components
 import CssBaseline from 'material-ui/CssBaseline';
@@ -41,7 +40,7 @@ const styles = theme => ({
 
 // read the .env file and load values into the process.env object
 // must come before any use of process.env
-dotenv.config();
+if (process.env.NODE_ENV !== 'production') require('dotenv').config({ silent: true });
 // console.log('env:', process.env);
 // read .env.development.local
 // dotenv.config({path: './.env.development.local'})
