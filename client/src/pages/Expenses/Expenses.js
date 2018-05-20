@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
@@ -43,7 +45,7 @@ class Expenses extends Component {
     if (currentUser) {
       const { homeLocationCurrencyCode, internLocationCurrencyCode } = currentUser;
       Util.getExchangeRate(homeLocationCurrencyCode, internLocationCurrencyCode)
-        .then(result => {
+        .then((result) => {
           if (result.error) return console.error(result.message);
           return this.setState({
             exchangeRate: result.quote.toFixed(2),
@@ -138,7 +140,8 @@ class Expenses extends Component {
       this.props.currentUser && this.props.currentUser.username ?
       <div>
         <Grid container spacing={24}>
-          <Grid item xs={6} sm={4}>   
+          {/* <Grid item xs={6} sm={4}> */}
+          <Grid item xs={12} sm={6} md={6}>
             <CreateForm
               handleDivChange={this.handleDivChange}
               handleInputChange={this.handleInputChange}
@@ -148,7 +151,8 @@ class Expenses extends Component {
               {...this.state}
             />
           </Grid>
-          <Grid item xs={6} sm={8}>
+          {/* <Grid item xs={6} sm={8}> */}
+          <Grid item xs={12} sm={6} md={6}>
             <Paper>
               <Graph expenses={this.state.expenseData} />
             </Paper>
