@@ -1,5 +1,3 @@
-/* eslint-disable object-curly-newline */
-
 import React from 'react';
 import { TableHead, TableCell, TableRow, } from 'material-ui/Table';
 import { withStyles } from 'material-ui/styles';
@@ -15,12 +13,12 @@ const CustomTableCell = withStyles(theme => ({
 }))(TableCell);
 
 
+
 const LedgerHead = (props) => {
   const columnData = [
     { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
     { id: 'description', numeric: false, disablePadding: false, label: 'Description' },
-    { id: 'category', numeric: false, disablePadding: false, label: 'Category' },
-    { id: 'usdamount', numeric: true, disablePadding: false, label: props.home },
+    { id: 'useamount', numeric: true, disablePadding: false, label: props.home },
     { id: 'localamount', numeric: true, disablePadding: false, label: props.intern },
   ];
   return (

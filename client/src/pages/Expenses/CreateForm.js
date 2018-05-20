@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import NumberFormat from 'react-number-format';
@@ -34,7 +32,7 @@ const CreateForm = props => (
             name="usdAmount"
             type="number"
             step="0.01"
-            style={{ width: 10 }}
+            style={{ width: 100 }}
             placeholder="0.00"
             value={props.usdAmount}
             onChange={props.handleInputChange}
@@ -86,8 +84,7 @@ const CreateForm = props => (
           name="date"
           value={props.date}
           onChange={props.handleInputChange}
-          InputLabelProps={{ shrink: true }}
-        />
+          InputLabelProps={{ shrink: true }} />
         <br />
         {/* <input name="date" type="date" value={props.date} placeholder={Date.now()} onChange={props.handleInputChange} /> */}
         <NumberFormat

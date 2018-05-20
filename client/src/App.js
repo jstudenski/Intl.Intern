@@ -1,12 +1,9 @@
-/* eslint-disable react/forbid-prop-types */
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // Material UI components
 import CssBaseline from 'material-ui/CssBaseline';
 // from Material, used to inject an array of styles into the DOM
 import { withStyles } from 'material-ui/styles';
-import PropTypes from 'prop-types';
 // Pages
 import Journal from './pages/Journal/';
 import Expenses from './pages/Expenses/';
@@ -62,7 +59,7 @@ class App extends React.Component {
     // console.log('in App.handleLogin, user is ', currentUser);
     this.setState({ currentUser });
     if (!currentUser) {
-      window.history.pushState({}, '', '/');
+      window.history.pushState({},"", '/');
     }
   }
   // pass to Sidebar component
@@ -109,9 +106,5 @@ class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(App);
