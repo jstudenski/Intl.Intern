@@ -1,26 +1,14 @@
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/prop-types */
 
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
-import {
-  Select,
-  FormControl,
-  InputLabel,
-  Radio,
-  RadioGroup,
-  // FormLabel,
-  FormControlLabel,
-} from 'material-ui';
-
 import AddItem from '../../components/AddItem';
 // import Radio, { RadioGroup } from 'material-ui/Radio';
 // import { FormLabel, FormControl, FormControlLabel, FormHelperText } from 'material-ui/Form';
 // import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 // import Button from 'material-ui/Button';
-
-// import Select from '@material-ui/core/Select';
 
 const CreateForm = props => (
   <div style={{ fontFamily: 'roboto' }}>
@@ -39,28 +27,6 @@ const CreateForm = props => (
           shrink: true,
         }}
         />
-        <FormControl >
-          <InputLabel htmlFor="category" shrink>Category</InputLabel>
-          <Select
-            native
-            label="Expense Category"
-            name="category"
-            onChange={props.handleInputChange}
-            value={props.category}
-          >
-            {[''].concat(props.expenseCategories).map(option => <option key={`expenseCategory-${option}`} value={option}>{option}</option>)}
-          </Select>
-        </FormControl>
-        {/* <FormControl >
-          <InputLabel htmlFor="category">Category</InputLabel>
-          <IntegrationReactSelect
-            label="category"
-            value={props.category}
-            handleInputChange={props.handleInputChange}
-            selectSuggestions={props.expenseCategories}
-            placeholder=""
-          />
-        </FormControl> */}
         <br />
         {(props.selectCurrency === 'usd') ? (
           <TextField
@@ -68,7 +34,7 @@ const CreateForm = props => (
             name="usdAmount"
             type="number"
             step="0.01"
-            style={{ width: 100 }}
+            style={{ width: 10 }}
             placeholder="0.00"
             value={props.usdAmount}
             onChange={props.handleInputChange}
@@ -90,17 +56,29 @@ const CreateForm = props => (
           }}
         />
       )}
-
-        <RadioGroup
-          aria-label="selectCurrency"
-          name="selectCurrency"
-          value={props.selectCurrency}
-          onChange={props.handleDivChange}
-        >
-          <FormControlLabel style={{ marginBottom: -10 }} value="usd" control={<Radio color="primary" />} label={props.currentUser ? props.currentUser.homeLocationCurrencyCode : 'usd'} />
-          <FormControlLabel style={{ marginTop: -10 }} value="other" control={<Radio color="primary" />} label={props.currentUser ? props.currentUser.internLocationCurrencyCode : 'other'} />
-        </RadioGroup>
-
+        <div style={{ display: 'inline-block' }}>
+          <label htmlFor="usd">
+            <input
+              type="radio"
+              id="usd"
+              name="selectCurrency"
+              value={1}
+              onClick={props.handleDivChange}
+            />
+            {props.currentUser ? props.currentUser.homeLocationCurrencyCode : 'usd'}
+          </label>
+          <br />
+          <label htmlFor="other">
+            <input
+              type="radio"
+              id="other"
+              name="selectCurrency"
+              value={2}
+              onClick={props.handleDivChange}
+            />
+            {props.currentUser ? props.currentUser.internLocationCurrencyCode : 'other'}
+          </label>
+        </div>
         <br />
         <TextField
           label="Date"
@@ -126,13 +104,9 @@ const CreateForm = props => (
         />
 
       </form>
-    </AddItem>
+    </AddItem >
   </div>
 );
-
-CreateForm.defaultProps = {
-  currentUser: {},
-};
 
 CreateForm.propTypes = {
   expenseDescription: PropTypes.string.isRequired,
@@ -143,13 +117,10 @@ CreateForm.propTypes = {
   internLabel: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   exchangeRate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  category: PropTypes.string.isRequired,
-  expenseCategories: PropTypes.array.isRequired,
   handleInputChange: PropTypes.func.isRequired,
   handleDivChange: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   handleInputChangeForNumberFormatField: PropTypes.func.isRequired,
-  currentUser: PropTypes.object,
 };
 
 export default CreateForm;

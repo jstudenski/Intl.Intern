@@ -1,8 +1,11 @@
+/* eslint-disable react/forbid-prop-types */
+
 import React from 'react';
 // material-ui
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
 import Typography from 'material-ui/Typography';
+import PropTypes from 'prop-types';
 import { MenuList } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
 // icons
@@ -89,6 +92,12 @@ const Sidebar = (props) => {
       : null }
     </Drawer>
   );
+};
+
+Sidebar.propTypes = {
+  classes: PropTypes.object.isRequired,
+  currentUser: PropTypes.isRequired,
+  pageChange: PropTypes.isRequired,
 };
 
 export default withStyles(styles)(Sidebar);
