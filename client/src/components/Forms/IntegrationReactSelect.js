@@ -3,6 +3,8 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-curly-brace-presence */
 /* eslint-disable arrow-parens */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/no-multi-comp */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -50,9 +52,7 @@ function SelectWrapped(props) {
     <Select
       optionComponent={Option}
       noResultsText={<Typography>{'No results found'}</Typography>}
-      arrowRenderer={arrowProps => {
-        return arrowProps.isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />;
-      }}
+      arrowRenderer={arrowProps => (arrowProps.isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />)}
       clearRenderer={() => <ClearIcon />}
       valueComponent={valueProps => {
         const { value, children, onRemove } = valueProps;
@@ -74,7 +74,6 @@ function SelectWrapped(props) {
             />
           );
         }
-
         return <div className="Select-value">{children}</div>;
       }}
       {...other}
@@ -208,43 +207,37 @@ const styles = theme => ({
 
 class IntegrationReactSelect extends React.Component {
   state = {
-    single: null,
-    multi: null,
-    multiLabel: null,
   };
 
-  handleChange = value =>  {
-    // console.log('value, ', value)
+  handleChange = value => {
     this.props.handleInputChange(value);
   };
 
   render() {
     const { classes } = this.props;
-
     return (
-      // <div className={classes.root}>
-        <Input
-          label={this.props.label}
-          inputComponent={SelectWrapped}
-          value={this.props.value}
-          onChange={this.handleChange}
-          placeholder={this.props.placeholder}
-          style={{
-            width: this.props.width || 200, 
-            // height: this.props.height || 20,
-            minWidth: this.props.minWidth || 10,
-            // minHeight: this.props.minHeight || 10,
-          }}
-          className={classes.textField}
-          inputProps={{
-            classes,
-            // name: 'react-select-single',
-            name: this.props.name,
-            instanceId: 'react-select-single',
-            simpleValue: true,
-            options: this.props.selectSuggestions,
-          }}
-        />
+      <Input
+        label={this.props.label}
+        inputComponent={SelectWrapped}
+        value={this.props.value}
+        onChange={this.handleChange}
+        placeholder={this.props.placeholder}
+        style={{
+          width: this.props.width || 200,
+          // height: this.props.height || 20,
+          minWidth: this.props.minWidth || 10,
+          // minHeight: this.props.minHeight || 10,
+        }}
+        className={classes.textField}
+        inputProps={{
+          classes,
+          // name: 'react-select-single',
+          name: this.props.name,
+          instanceId: 'react-select-single',
+          simpleValue: true,
+          options: this.props.selectSuggestions,
+        }}
+      />
       // </div>
     );
   }

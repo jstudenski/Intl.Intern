@@ -1,4 +1,6 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 // Material UI
 import { Button, TextField, Select, Typography, } from 'material-ui';
 import Input, { InputLabel } from 'material-ui/Input';
@@ -103,7 +105,6 @@ class RegistrationForm extends Component {
             value: suggestion,
             label: suggestion,
           }));
-        // console.log('countryCodeData', countryCodeData, 'suggestions', countryNameSuggestions);
         this.setState({
           countryNameSuggestions,
           countryCodeData,
@@ -125,7 +126,6 @@ class RegistrationForm extends Component {
   }
 
   sendRegistrationData = () => {
-    console.log('state: ', this.state);
     if (this.state.password !== this.state.passwordConfirm) {
       this.setState({ error: 'Password and Password Confirmation do not match' });
       // launch error dialog
@@ -179,7 +179,6 @@ class RegistrationForm extends Component {
       .then((response) => {
         const newUser = response.data.user;
         // send the new user data up to the App.js component
-        console.log('newUser: ', newUser);
         this.setState({
           // currentUser: newUser,
           username: '',
@@ -282,15 +281,36 @@ class RegistrationForm extends Component {
 
                 <TextField className={this.props.classes.textField} label="City" name="homeLocationCity" required type="text" value={this.state.homeLocationCity} onChange={this.handleInputChange} />
                 {/* <br /> */}
-                <IntegrationReactSelect label="Home Country" value={this.state.homeLocationCountry} handleInputChange={value => this.handleInputChangeForAutoCompleteField('homeLocationCountry')(value)} placeholder="Country" selectSuggestions={this.state.countryNameSuggestions} />
-                {/* <br /> */}
+                <FormControl >
+                  <InputLabel htmlFor="homeLocationCountry">Home Country</InputLabel>
+                  <IntegrationReactSelect
+                    label="Home Country"
+                    value={this.state.homeLocationCountry}
+                    handleInputChange={value => this.handleInputChangeForAutoCompleteField('homeLocationCountry')(value)}
+                    placeholder=""
+                    selectSuggestions={this.state.countryNameSuggestions}
+                  />
+                  {/* <br /> */}
+                </FormControl>
                 <TextField className={this.props.classes.textField} label="Country Code" name="homeLocationCountryCode" required type="text" value={this.state.homeLocationCountryCode} onChange={this.handleInputChange} />
                 <TextField className={this.props.classes.textField} label="Currency" name="homeLocationCurrencyCode" required type="text" value={this.state.homeLocationCurrencyCode} onChange={this.handleInputChange} />
 
                 <Divider className={this.props.classes.divider} light />
                 <Typography variant="subheading" gutterBottom>Intern Location</Typography>
                 <TextField className={this.props.classes.textField} label="City" name="internLocationCity" required type="text" value={this.state.internLocationCity} onChange={this.handleInputChange} />
-                <IntegrationReactSelect label="Intern Country" name="internLocationCountry" required type="text" value={this.state.internLocationCountry} handleInputChange={value => this.handleInputChangeForAutoCompleteField('internLocationCountry')(value)} selectSuggestions={this.state.countryNameSuggestions} placeholder="Country" />
+                <FormControl >
+                  <InputLabel htmlFor="internLocationCountry">Intern Country</InputLabel>
+                  <IntegrationReactSelect
+                    label="Intern Country"
+                    name="internLocationCountry"
+                    required
+                    type="text"
+                    value={this.state.internLocationCountry}
+                    handleInputChange={value => this.handleInputChangeForAutoCompleteField('internLocationCountry')(value)}
+                    selectSuggestions={this.state.countryNameSuggestions}
+                    placeholder=""
+                  />
+                </FormControl>
                 <TextField className={this.props.classes.textField} label="Country Code" name="internLocationCountryCode" required type="text" value={this.state.internLocationCountryCode} onChange={this.handleInputChange} />
                 <TextField className={this.props.classes.textField} label="Currency" name="internLocationCurrencyCode" required type="text" value={this.state.internLocationCurrencyCode} onChange={this.handleInputChange} />
                 {/* <br /> */}
@@ -338,5 +358,10 @@ class RegistrationForm extends Component {
     );
   }
 }
+
+RegistrationForm.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+};
 
 export default withStyles(styles)(RegistrationForm);
