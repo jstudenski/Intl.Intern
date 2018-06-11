@@ -1,7 +1,5 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import Table, { TableBody, TableCell, TableRow, TablePagination, } from 'material-ui/Table';
-import PropTypes from 'prop-types';
 // import Card from 'material-ui/Card';
 import { withStyles } from 'material-ui/styles';
 import ExpenseLedgerItem from './ExpenseLedgerItem';
@@ -51,11 +49,10 @@ class Ledger extends React.Component {
               rowCount={this.props.expenses.length}
               home={this.props.home}
               intern={this.props.intern}
-              {...this.props}
             />
             <TableBody>
               {this.props.expenses.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                  .map((expense, i) => <ExpenseLedgerItem key={expense._id} {...expense} showCategories={this.props.showCategories} id={i} classes={classes} />)
+                  .map((expense, i) => <ExpenseLedgerItem key={expense._id} {...expense} id={i} classes={classes} />)
               }
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
@@ -83,14 +80,6 @@ class Ledger extends React.Component {
     );
   }
 }
-
-Ledger.propTypes = {
-  classes: PropTypes.object.isRequired,
-  expenses: PropTypes.array.isRequired,
-  home: PropTypes.string.isRequired,
-  intern: PropTypes.string.isRequired,
-  showCategories: PropTypes.bool.isRequired,
-};
 
 export default withStyles(styles)(Ledger);
 

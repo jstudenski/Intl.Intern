@@ -1,9 +1,9 @@
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/prop-types */
+
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import { withStyles } from 'material-ui/styles';
-import PropTypes from 'prop-types';
 import CreateForm from './CreateForm';
 import Ledger from './Ledger';
 import Graph from './Graph';
@@ -20,7 +20,6 @@ const styles = theme => ({
 class Expenses extends Component {
   state = {
     expenseDescription: '',
-    category: '',
     date: '', // '', Date.now(), now working currenlty
     usdAmount: '0.00',
     locationAmount: '0',
@@ -60,9 +59,7 @@ class Expenses extends Component {
 
   handleDivChange = (event) => {
     // this.setState({ selectCurrency: event.target.value });
-    console.log('event.target', event.target);
-    // this.setState({ selectCurrency: event.target.id });
-    this.setState({ selectCurrency: event.target.value });
+    this.setState({ selectCurrency: event.target.id });
   }
 
   handleInputChange = event => this.setState({ [event.target.name]: event.target.value })
@@ -88,11 +85,9 @@ class Expenses extends Component {
     event.preventDefault();
     // console.log('current state', this.state);
 
-    if (
-      this.state.expenseDescription &&
+    if (this.state.expenseDescription &&
       this.state.date &&
-      (this.state.usdAmount || this.state.locationAmount)
-    ) {
+      (this.state.usdAmount || this.state.locationAmount)) {
       const usdAmount = this.state.selectCurrency === 'usd' ? this.state.usdAmount : (this.state.locationAmount / this.state.exchangeRate).toFixed(2);
       const locationAmount = this.state.selectCurrency !== 'usd' ? this.state.locationAmount : (this.state.usdAmount * this.state.exchangeRate).toFixed(2);
 
@@ -113,7 +108,6 @@ class Expenses extends Component {
         expAmount: usdAmount,
         expDate: this.state.date,
         expAmountLocalCurrency: locationAmount,
-        category: this.state.category,
       };
 
       API.newExpense(data)
@@ -127,7 +121,7 @@ class Expenses extends Component {
 
           });
           API.getExpenses().then((res) => {
-            console.log('API expense response: ', res);
+            // console.log('API expense response: ', res);
             this.setState({
               expenseData: res.data,
             });
@@ -142,52 +136,38 @@ class Expenses extends Component {
   }
 
   render() {
-    // const sortComparator = (exp1, exp2) => exp1.expDate - exp2.expDate;
-    const expenseCategories = ([...new Set(this.state.expenseData.map(expense => expense.category))]).filter(category => typeof category === 'string' && category !== '').sort();
-    // const expenseCategories = [];
-    // const sortedExpenses = this.state.expenseData.slice(0).sort(sortComparator);
-
-    const sortedExpenses = this.state.expenseData.slice(0).sort((a, b) => (a.expDate < b.expDate ? 1 : -1));
-    // console.log("state: ", this.state);
     return (
       this.props.currentUser && this.props.currentUser.username ?
-        <div>
-          <Grid container spacing={24}>
-            <Grid item xs={6} sm={4}>
-              <CreateForm
-                handleDivChange={this.handleDivChange}
-                handleInputChange={this.handleInputChange}
-                handleInputChangeForNumberFormatField={this.handleInputChangeForNumberFormatField}
-                submitForm={this.submitForm}
-                currentUser={this.props.currentUser}
-                {...this.state}
-                expenseCategories={expenseCategories}
-              />
-            </Grid>
-            <Grid item xs={6} sm={8}>
-              <Paper>
-                <Graph expenses={this.state.expenseData} />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper>
-                <Ledger showCategories={expenseCategories.length > 0} expenses={sortedExpenses} home={this.state.homeLabel} intern={this.state.internLabel} />
-              </Paper>
-            </Grid>
+      <div>
+        <Grid container spacing={24}>
+          {/* <Grid item xs={6} sm={4}> */}
+          <Grid item xs={12} sm={6} md={6}>
+            <CreateForm
+              handleDivChange={this.handleDivChange}
+              handleInputChange={this.handleInputChange}
+              handleInputChangeForNumberFormatField={this.handleInputChangeForNumberFormatField}
+              submitForm={this.submitForm}
+              currentUser={this.props.currentUser}
+              {...this.state}
+            />
           </Grid>
-        </div>
-        :
-        <div><p>Please Loading data...</p></div>
+          {/* <Grid item xs={6} sm={8}> */}
+          <Grid item xs={12} sm={6} md={6}>
+            <Paper>
+              <Graph expenses={this.state.expenseData} />
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper>
+              <Ledger expenses={this.state.expenseData} home={this.state.homeLabel} intern={this.state.internLabel} />
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
+      :
+      <div><p>Please Loading data...</p></div>
     );
   }
 }
-
-Expenses.defaultProps = {
-  currentUser: {},
-};
-
-Expenses.propTypes = {
-  currentUser: PropTypes.object,
-};
 
 export default withStyles(styles)(Expenses);
